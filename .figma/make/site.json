@@ -1,0 +1,11 @@
+{
+  "title": "Prompt Wise",
+  "description": "Empowering university students to assess their AI usage responsibly through an engaging quiz, offering instant feedback and personalized tips for improvement.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
