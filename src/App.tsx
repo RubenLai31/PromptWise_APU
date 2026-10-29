@@ -72,59 +72,59 @@ const questions: Question[] = [
     part: 1,
     category: "Verify",
     points: 1,
-    prompt: "Did you check the AI's facts against reliable sources?",
+    prompt: "Have you independently checked and verified every claim, figure and piece of code from AI?",
     answers: habitAnswers,
     habitTip:
-      "Compare AI claims with your notes, textbooks or the library database. Fluent writing does not mean accurate.",
+      "Cross-check facts and figures against academic databases or textbooks, and run calculations and code yourself. Fluent writing does not mean accurate.",
   },
   {
     id: 2,
     part: 1,
     category: "Own Work",
     points: 1,
-    prompt: "Can you explain the final answer without looking at the AI's response?",
+    prompt: "Can you defend your submission and explain all concepts and reasoning without AI?",
     answers: habitAnswers,
     habitTip:
-      "Close the chat and explain it in your own words. Where you get stuck is what you still need to learn.",
+      "If you cannot explain it, do not submit it yet. Close the chat and explain it in your own words; where you get stuck is what you still need to learn.",
   },
   {
     id: 3,
     part: 1,
     category: "Own Work",
     points: 1,
-    prompt: "Did you plan and write the work in your own words and thinking?",
+    prompt: "Do you understand all the code and text you are submitting?",
     answers: habitAnswers,
     habitTip:
-      "Swapping a few words keeps the AI's ideas. Outline and draft first, then ask AI for feedback.",
+      "Understanding builds step by step. Ask AI to explain one part at a time, then test yourself.",
   },
   {
     id: 4,
     part: 1,
     category: "Verify",
     points: 1,
-    prompt: "Did you check that every reference is real and says what you claim?",
+    prompt: "Did you check that every reference, DOI and link is real, and that the authors and titles exist?",
     answers: habitAnswers,
     habitTip:
-      "AI can invent believable references. Search each title in Google Scholar or the library. If you cannot find it, do not use it.",
+      "AI can invent believable references. Open each DOI or link and search each title in Google Scholar or the library. If you cannot find it, do not use it.",
   },
   {
     id: 5,
     part: 1,
     category: "Rules",
     points: 1,
-    prompt: "Did you check and follow your assignment's AI rules?",
+    prompt: "Does your use of AI align with your module and programme policies?",
     answers: habitAnswers,
     habitTip:
-      "Rules differ by subject and task. Read the brief or ask your lecturer before you start and before you submit.",
+      "Policies differ by module. Read the brief and guidelines, and ask your lecturer early if you are unsure.",
   },
   {
     id: 6,
     part: 1,
     category: "Rules",
     points: 1,
-    prompt: "Did you declare how AI helped you?",
+    prompt: "Did you disclose AI use where it helped with ideas, coding or planning?",
     answers: habitAnswers,
-    habitTip: "Name the tool, what it did and what you did yourself. Being open protects you.",
+    habitTip: "Disclose when AI contributed significantly. Name the tool, what it did and what you did yourself.",
   },
   {
     id: 7,
@@ -278,20 +278,17 @@ const questions: Question[] = [
   {
     id: 16,
     part: 3,
-    category: "Critical",
+    category: "AI Skills",
     points: 1,
-    prompt: "Which best describes responsible AI use?",
+    prompt: "You need to build a small app for your project. Which approach follows responsible, step-by-step AI use?",
     answers: [
-      {
-        text: "Using AI as a support tool while you understand, verify and take responsibility for the final work",
-        correct: true,
-      },
-      { text: "Using AI to finish as fast as possible" },
-      { text: "Using AI only if nobody can tell" },
-      { text: "Never using AI at all" },
+      { text: "Ask for one small piece at a time, run and test it yourself, and understand it before moving on", correct: true },
+      { text: "Ask AI to generate the whole project in one prompt, then fix errors later" },
+      { text: "Copy the full project and only rename the variables" },
+      { text: "Ask AI to build it and submit it if it runs" },
     ],
     explanation:
-      "Responsible use is not about banning AI. You stay in charge: you think, check, follow the rules and own the result.",
+      "Real understanding builds step by step. Using AI to speed up learning, not replace it, also keeps your project easier to track, test and manage.",
   },
   {
     id: 17,
@@ -395,13 +392,13 @@ const questions: Question[] = [
     points: 1,
     prompt: "What is the best way to fact-check an AI claim?",
     answers: [
-      { text: "Compare it with other reliable sources such as textbooks, journals or official sites", correct: true },
+      { text: "Compare it with reliable sources such as academic databases and textbooks, check that DOIs, links, authors and titles exist, and look for self-contradicting arguments", correct: true },
       { text: "Ask the AI if it is sure" },
       { text: "Ask a second AI and accept it if they match" },
       { text: "Check that it sounds professional" },
     ],
     explanation:
-      "Independent, reliable sources are the standard. Two AIs can repeat the same mistake.",
+      "Independent sources are the standard. Check DOIs and links, and look for logic errors. If you do not understand the topic, you may not spot the errors, so build your understanding first.",
   },
 ];
 
@@ -643,10 +640,10 @@ function Results({
     "Check the assignment rules",
   ];
   const checklistItems = [
-    "I verified the facts",
-    "I checked every reference exists",
-    "I wrote it in my own words",
-    "I followed the AI rules",
+    "My AI use aligns with my module and programme policies",
+    "I understand all the code and text",
+    "I independently checked and verified every claim, reference and piece of code",
+    "I can defend this and explain it without AI",
     "I declared how AI helped",
     "I did not enter personal data",
   ];
@@ -701,6 +698,7 @@ function Results({
       <section className="result-card toolkit-card"><div className="tool-number">Step 4</div><div className="card-heading"><div><span className="kicker">Declaration helper</span><h2>Edit, copy and follow your university format</h2></div></div><label className="declaration-label" htmlFor="declaration">Your declaration</label><textarea id="declaration" className="declaration-box" value={declaration} onChange={(event) => setDeclaration(event.target.value)} rows={5} /><div className="declaration-actions"><span>Replace the words in brackets before submitting.</span><Button onClick={() => copy(declaration, "declaration")} icon={copied === "declaration" ? "check" : "copy"}>{copied === "declaration" ? "Copied" : "Copy declaration"}</Button></div></section>
 
       <section className="completion-card"><div><div className="tool-number light-number">Step 5</div><span className="kicker light">Share what you learned</span><h2>{codeRef.current}</h2><p>Save your completion code and invite a friend to check their AI habits.</p></div><div className="completion-actions"><Button variant="secondary" onClick={() => copy(codeRef.current, "code")} icon={copied === "code" ? "check" : "copy"}>{copied === "code" ? "Copied" : "Copy code"}</Button>{GOOGLE_FORM_URL && <Button onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")} icon="external">Submit your code and feedback</Button>}<Button variant="secondary" onClick={share} icon={copied === "share" ? "check" : "share"}>{copied === "share" ? "Challenge copied" : "Challenge a friend"}</Button></div></section>
+      <section className="result-card toolkit-card"><div className="card-heading"><div><span className="kicker">Keep improving</span><h2>One-week improvement challenge</h2></div></div><p>Pick one past assignment or project. Over the next one to two weeks, improve it using what you learned here, step by step and verifying as you go. Then retake the checker and compare your score.</p><p><b>Responsible AI use is a mindset.</b> Follow what interests you, and enjoy building something from what you understand yourself.</p></section>
       <div className="retake-block"><p>Retake the checker after you have tried your priorities, and see if your score improves.</p><Button variant="ghost" onClick={restart} icon="refresh">Try again</Button></div>
       <p className="privacy-note"><Icon name="lock" />No names. No login. Your quiz answers are not stored.</p>
     </div>
@@ -717,7 +715,7 @@ function About({ start }: { start: () => void }) {
     <section className="section container about-grid"><div><span className="sdg-badge">4 <small>QUALITY<br />EDUCATION</small></span></div><div><span className="kicker">UN Sustainable Development Goal 4</span><h2>Quality education for everyone</h2><p>SDG 4 aims to ensure inclusive and equitable quality education and promote lifelong learning opportunities for all. Responsible AI literacy is part of being ready to learn, work and participate thoughtfully in a changing world.</p><p>This campaign gives students a practical way to reflect, learn and take action without banning useful technology or treating AI use as automatically wrong.</p><Button onClick={start} icon="arrow">Start the checker</Button></div></section>
     <section className="section about-details"><div className="container"><div className="section-heading"><span className="kicker">How scoring works</span><h2>Clear rules. No hidden judgement.</h2><p>Part 1 awards 1 point for Yes, 0.5 for Sometimes and 0 for No. In Parts 2 and 3, each correct answer earns the points shown and a wrong answer earns 0. Your percentage is your points divided by the maximum points.</p></div><div className="band-grid">{bands.map(([colour, name, range, description]) => <article key={name}><span className={`band-dot ${colour}`} /><small>{range}</small><h3>{name}</h3><p>{description}</p></article>)}</div></div></section>
     <section className="section container limits-grid"><article><span className="learning-icon"><Icon name="compass" /></span><h2>What this tool can and cannot do</h2><p>Prompt Wise supports self-reflection. It is not a detector, not an official judgement and not evidence that misconduct has or has not happened. Assignment rules and lecturer guidance always come first.</p></article><article><span className="learning-icon"><Icon name="lock" /></span><h2>Your privacy</h2><p>No names, accounts or quiz answers are stored. Everything is calculated in your browser.</p></article></section>
-    <section className="container team-card"><div><span className="kicker">The project team</span><h2>{TEAM_NAME}</h2><p>A social impact campaign supporting responsible AI literacy.</p></div><div><h3>Note for educators</h3><p>This is a learning aid for opening constructive conversations about responsible AI use. It should not be used to investigate or determine academic misconduct.</p></div></section>
+    <section className="container team-card"><div><span className="kicker">The project team</span><h2>{TEAM_NAME}</h2><p>A social impact campaign supporting responsible AI literacy.</p><p><b>Informed by expert advice:</b> this checker was refined after an interview with a university lecturer in AI, machine learning and data science.</p></div><div><h3>Note for educators</h3><p>This is a learning aid for opening constructive conversations about responsible AI use. It should not be used to investigate or determine academic misconduct.</p></div></section>
   </main>;
 }
 
