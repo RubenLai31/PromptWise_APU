@@ -477,51 +477,32 @@ function Home({ start, about }: { start: () => void; about: () => void }) {
   ];
   return <main>
     <section className="hero">
-      <div className="hero-orb orb-one" /><div className="hero-orb orb-two" />
-      <div className="container hero-grid">
+            <div className="container hero-grid">
         <div className="hero-copy">
-          <div className="eyebrow"><span /> Supporting UN SDG 4 · Quality Education</div>
-          <h1>Think before<br />you <em>prompt.</em></h1>
-          <p>A 7-minute check on how responsibly you use AI for study</p>
+          <h1>Think before you <em>prompt.</em></h1>
+          <p>A quick quiz on how you actually use AI for your studies. It takes about seven minutes, and nobody sees your answers.</p>
           <div className="hero-actions"><Button onClick={start} icon="arrow">Start the checker</Button><button className="text-link" onClick={about}>Why it matters <Icon name="arrow" /></button></div>
-          <div className="trust-row"><span><Icon name="book" />23 questions</span><span><Icon name="clock" />About 7 minutes</span><span><Icon name="lock" />Anonymous</span><span><Icon name="spark" />Instant tips</span></div>
-        </div>
-        <div className="hero-visual" aria-label="Illustration of a protected AI conversation">
-          <div className="ai-card"><div className="ai-top"><span className="ai-avatar"><Icon name="brain" size={28} /></span><div><b>AI study assistant</b><small>Pause. Check. Learn.</small></div><span className="online-dot" /></div><div className="chat-line wide" /><div className="chat-line" /><div className="chat-bubble">Can I verify this claim?</div></div>
-          <div className="shield-float"><Icon name="shield" size={46} /><span>Stay in charge</span></div>
-          <div className="spark-float"><Icon name="spark" /></div>
+          <div className="trust-row"><span><Icon name="book" />23 questions</span><span><Icon name="clock" />About 7 minutes</span><span><Icon name="lock" />Anonymous</span></div>
         </div>
       </div>
-      <div className="wave" />
     </section>
 
     <section className="section container">
-      <div className="section-heading"><span className="kicker">Simple and practical</span><h2>How it works</h2><p>No judgement. Just a clear picture of your habits and what to try next.</p></div>
+      <div className="section-heading"><span className="kicker">Simple and practical</span><h2>How it works</h2><p>You can't fail it. It just shows where your AI habits are good and where they could be better.</p></div>
       <div className="steps">
-        <article><span className="step-num">01</span><div className="step-icon"><Icon name="book" /></div><h3>Answer</h3><p>Think about your usual AI habits and real study situations.</p></article>
-        <article><span className="step-num">02</span><div className="step-icon blue"><Icon name="brain" /></div><h3>Learn why</h3><p>Get a short explanation after every answer.</p></article>
-        <article><span className="step-num">03</span><div className="step-icon amber"><Icon name="spark" /></div><h3>Get your plan</h3><p>See your strongest areas and three practical next steps.</p></article>
+        <article><span className="step-num">01</span><h3>Answer</h3><p>Think about your usual AI habits and real study situations.</p></article>
+        <article><span className="step-num">02</span><h3>Learn why</h3><p>Get a short explanation after every answer.</p></article>
+        <article><span className="step-num">03</span><h3>Get your plan</h3><p>See your strongest areas and three practical next steps.</p></article>
       </div>
     </section>
 
     <section className="section learning-section"><div className="container">
       <div className="section-heading left"><span className="kicker">Skills for study and beyond</span><h2>What you will learn</h2></div>
-      <div className="learning-grid">{learning.map(([title, text, icon]) => <article className="learning-card" key={title}><span className="learning-icon"><Icon name={icon} /></span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
-    </div></section>
-
-    <section className="section container why-grid">
-      <div className="why-art"><div className="mini-stat"><b>23</b><span>real-world study scenarios</span></div><div className="mini-shield"><Icon name="shield" size={54} /></div></div>
-      <div><span className="kicker">Why it matters</span><h2>AI can support learning—when you stay in charge.</h2><p>AI tools can be useful study partners. They can also make up facts, repeat bias and blur the line between support and substitution. Prompt Wise helps you make thoughtful choices before you submit.</p><div className="todo-stat"><b>6</b><span>responsible AI skill areas to explore</span></div></div>
-    </section>
-
-    <section className="section toolkit-preview" id="toolkit"><div className="container">
-      <div className="section-heading"><span className="kicker">After the quiz toolkit</span><h2>Your score is only the start.</h2><p>Finish the checker to unlock five practical tools you can use on your next assignment.</p></div>
-      <div className="toolkit-steps">{["Your 3 priorities", "Make a pledge", "Before you submit", "Declaration helper", "Share & improve"].map((step, i) => <article key={step}><span>{i + 1}</span><h3>{step}</h3></article>)}</div>
-      <div className="toolkit-preview-action"><Button onClick={start} icon="arrow">Start and unlock my toolkit</Button></div>
+      <div className="learning-grid">{learning.map(([title, text, icon]) => <article className="learning-card" key={title}><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
     </div></section>
 
     <section className="container home-privacy"><Icon name="lock" /><p><b>No names. No login.</b> Your answers stay in this browser and are not stored.</p></section>
-    <section className="container cta"><div><span className="kicker light">Ready when you are</span><h2>Seven minutes. Better AI habits.</h2><p>Private, instant and built for students.</p></div><Button onClick={start} icon="arrow">Check my AI habits</Button></section>
+    <section className="container cta"><div><span className="kicker light">Ready when you are</span><h2>Give it seven minutes.</h2><p>Free, private and made for APU students.</p></div><Button onClick={start} icon="arrow">Check my AI habits</Button></section>
   </main>;
 }
 
@@ -632,13 +613,6 @@ function Results({
   const weakest = rankedAreas[0];
   const strongest = rankedAreas[rankedAreas.length - 1];
   const missed = questions.filter((q) => !responses[q.id]?.answer.correct);
-  const pledgeOptions = [
-    "Verify every fact",
-    "Write first and ask AI later",
-    "Declare my AI use",
-    "Keep personal data out",
-    "Check the assignment rules",
-  ];
   const checklistItems = [
     "My AI use aligns with my module and programme policies",
     "I understand all the code and text",
@@ -648,7 +622,6 @@ function Results({
     "I did not enter personal data",
   ];
   const [copied, setCopied] = useState("");
-  const [pledge, setPledge] = useState("");
   const [checks, setChecks] = useState<boolean[]>(() => checklistItems.map(() => false));
   const [declaration, setDeclaration] = useState(
     "I used [tool name] to [brainstorm ideas / check grammar / explain a concept]. I wrote [the analysis / the final text] myself and verified all facts and references.",
@@ -677,27 +650,22 @@ function Results({
   const resultIcon = result.band === "green" ? "shield" : result.band === "amber" ? "compass" : "warning";
   const resultDate = new Intl.DateTimeFormat("en-MY", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
   return <main className="results-bg">
-    {result.band === "green" && <div className="confetti" aria-hidden="true">{Array.from({ length: 18 }).map((_, i) => <i key={i} />)}</div>}
     <div className="results-nav"><Logo onClick={home} /><span>Your results</span></div>
     <section className="results-hero container">
-      <div><span className="kicker">Checker complete</span><h1>Your AI habits,<br />made clearer.</h1><p>Here is your personal snapshot. Use it as a guide, not a label.</p></div>
+      <div><span className="kicker">Checker complete</span><h1>Here is how you did.</h1><p>Treat it as a guide, not a grade.</p></div>
       <div className="result-summary"><ScoreRing percent={percent} band={result.band} /><div><span className={`result-badge ${result.band}`}><Icon name={resultIcon} />{result.name}</span><p>{result.message}</p></div></div>
     </section>
     <div className="container results-content">
       <section className="result-card area-card"><div className="card-heading"><div><span className="kicker">Your skill map</span><h2>Score by area</h2></div><span className="small-note">Based on all 23 questions</span></div><div className="area-callouts"><span><Icon name="spark" />Strongest: <b>{strongest.category}</b></span><span><Icon name="compass" />Focus area: <b>{weakest.category}</b></span></div><div className="bars">{areaScores.map((area) => <div className="bar-row" key={area.category}><span>{area.category}</span><div><i style={{ width: `${area.percent}%` }} /></div><b>{area.percent}%</b></div>)}</div></section>
       <section className="result-card review-card"><div className="card-heading"><div><span className="kicker">Learn from it</span><h2>Review what you missed</h2></div><span className="missed-count">{missed.length} to review</span></div>{missed.length === 0 ? <div className="all-correct"><Icon name="check" /><p>You answered every question with the strongest choice.</p></div> : <div className="review-list">{missed.map((q) => <details key={q.id}><summary><span>Q{q.id}</span><b>{q.prompt}</b><Icon name="chevron" /></summary><div><small>Best answer</small><p className="best-answer">{q.answers.find((a) => a.correct)?.text}</p><small>Why it matters</small><p>{q.part === 1 ? q.habitTip : q.explanation}</p></div></details>)}</div>}</section>
 
-      <section className="next-steps-banner"><div><span className="kicker light">What happens next</span><h2>Turn your result into better habits.</h2><p>Work through these five steps now, or return before your next submission.</p></div><div className="next-step-list">{["Priorities", "Pledge", "Checklist", "Declaration", "Share"].map((step, i) => <span key={step}><b>{i + 1}</b>{step}</span>)}</div></section>
-
       <section id="priorities"><div className="tool-number">Step 1</div><div className="card-heading"><div><span className="kicker">Your 3 priorities</span><h2>Start with your lowest areas</h2></div></div><div className="tip-grid">{lowest.map((area, i) => <article className="tip-card priority-card" key={area.category}><span className="tip-number">0{i + 1}</span><span className="tip-icon"><Icon name={i === 0 ? "shield" : i === 1 ? "brain" : "spark"} /></span><h3>{area.category}</h3><p>{areaTips[area.category]}</p><div className="try-this"><b>Try this on your next assignment</b><span>{practicalActions[area.category]}</span></div>{INSTAGRAM_URL && <a className="post-link" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Read our post <Icon name="external" /></a>}</article>)}</div></section>
 
-      <section className="result-card toolkit-card"><div className="tool-number">Step 2</div><div className="card-heading"><div><span className="kicker">Make a pledge</span><h2>Choose one habit to practise</h2></div></div><div className="pledge-options" role="group" aria-label="Choose your pledge">{pledgeOptions.map((option) => <button key={option} className={pledge === option ? "selected" : ""} onClick={() => setPledge(option)}><span>{pledge === option && <Icon name="check" />}</span>{option}</button>)}</div>{pledge && <div className="pledge-card fade-in"><div className="pledge-brand"><span className="logo-mark"><Icon name="shield" /></span><b>My Prompt Wise pledge</b></div><blockquote>“I will {pledge.toLowerCase()}.”</blockquote><div><span>{result.name}</span><span>{resultDate}</span></div><small>Think Before You Prompt</small></div>}</section>
+      <section className="result-card toolkit-card checklist-card"><div className="tool-number">Step 2</div><div className="card-heading"><div><span className="kicker">Before you submit</span><h2>Before you hand it in</h2></div><Button variant="secondary" onClick={() => window.print()} icon="print">Print / Save as PDF</Button></div><div className="checklist">{checklistItems.map((item, i) => <label key={item}><input type="checkbox" checked={checks[i]} onChange={() => setChecks(checks.map((value, index) => index === i ? !value : value))} /><span className="custom-check">{checks[i] && <Icon name="check" size={16} />}</span><b>{item}</b></label>)}</div><div className={`ready-status ${allChecked ? "ready" : ""}`} role="status"><Icon name={allChecked ? "check" : "clock"} /><div><b>{allChecked ? "Ready to submit" : `${checks.filter(Boolean).length} of 6 checked`}</b><span>{allChecked ? "You completed every check." : "Complete all six before you submit."}</span></div></div></section>
 
-      <section className="result-card toolkit-card checklist-card"><div className="tool-number">Step 3</div><div className="card-heading"><div><span className="kicker">Before you submit</span><h2>Run a final responsible-AI check</h2></div><Button variant="secondary" onClick={() => window.print()} icon="print">Print / Save as PDF</Button></div><div className="checklist">{checklistItems.map((item, i) => <label key={item}><input type="checkbox" checked={checks[i]} onChange={() => setChecks(checks.map((value, index) => index === i ? !value : value))} /><span className="custom-check">{checks[i] && <Icon name="check" size={16} />}</span><b>{item}</b></label>)}</div><div className={`ready-status ${allChecked ? "ready" : ""}`} role="status"><Icon name={allChecked ? "check" : "clock"} /><div><b>{allChecked ? "Ready to submit" : `${checks.filter(Boolean).length} of 6 checked`}</b><span>{allChecked ? "You completed every check." : "Complete all six before you submit."}</span></div></div></section>
+      <section className="result-card toolkit-card"><div className="tool-number">Step 3</div><div className="card-heading"><div><span className="kicker">Declaration helper</span><h2>Write your AI declaration</h2></div></div><label className="declaration-label" htmlFor="declaration">Your declaration</label><textarea id="declaration" className="declaration-box" value={declaration} onChange={(event) => setDeclaration(event.target.value)} rows={5} /><div className="declaration-actions"><span>Replace the words in brackets before submitting.</span><Button onClick={() => copy(declaration, "declaration")} icon={copied === "declaration" ? "check" : "copy"}>{copied === "declaration" ? "Copied" : "Copy declaration"}</Button></div></section>
 
-      <section className="result-card toolkit-card"><div className="tool-number">Step 4</div><div className="card-heading"><div><span className="kicker">Declaration helper</span><h2>Edit, copy and follow your university format</h2></div></div><label className="declaration-label" htmlFor="declaration">Your declaration</label><textarea id="declaration" className="declaration-box" value={declaration} onChange={(event) => setDeclaration(event.target.value)} rows={5} /><div className="declaration-actions"><span>Replace the words in brackets before submitting.</span><Button onClick={() => copy(declaration, "declaration")} icon={copied === "declaration" ? "check" : "copy"}>{copied === "declaration" ? "Copied" : "Copy declaration"}</Button></div></section>
-
-      <section className="completion-card"><div><div className="tool-number light-number">Step 5</div><span className="kicker light">Share what you learned</span><h2>{codeRef.current}</h2><p>Save your completion code and invite a friend to check their AI habits.</p></div><div className="completion-actions"><Button variant="secondary" onClick={() => copy(codeRef.current, "code")} icon={copied === "code" ? "check" : "copy"}>{copied === "code" ? "Copied" : "Copy code"}</Button>{GOOGLE_FORM_URL && <Button onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")} icon="external">Submit your code and feedback</Button>}<Button variant="secondary" onClick={share} icon={copied === "share" ? "check" : "share"}>{copied === "share" ? "Challenge copied" : "Challenge a friend"}</Button></div></section>
+      <section className="completion-card"><div><div className="tool-number light-number">Step 4</div><span className="kicker light">Share what you learned</span><h2>{codeRef.current}</h2><p>Save your completion code and invite a friend to check their AI habits.</p></div><div className="completion-actions"><Button variant="secondary" onClick={() => copy(codeRef.current, "code")} icon={copied === "code" ? "check" : "copy"}>{copied === "code" ? "Copied" : "Copy code"}</Button>{GOOGLE_FORM_URL && <Button onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")} icon="external">Submit your code and feedback</Button>}<Button variant="secondary" onClick={share} icon={copied === "share" ? "check" : "share"}>{copied === "share" ? "Challenge copied" : "Challenge a friend"}</Button></div></section>
       <section className="result-card toolkit-card"><div className="card-heading"><div><span className="kicker">Keep improving</span><h2>One-week improvement challenge</h2></div></div><p>Pick one past assignment or project. Over the next one to two weeks, improve it using what you learned here, step by step and verifying as you go. Then retake the checker and compare your score.</p><p><b>Responsible AI use is a mindset.</b> Follow what interests you, and enjoy building something from what you understand yourself.</p></section>
       <div className="retake-block"><p>Retake the checker after you have tried your priorities, and see if your score improves.</p><Button variant="ghost" onClick={restart} icon="refresh">Try again</Button></div>
       <p className="privacy-note"><Icon name="lock" />No names. No login. Your quiz answers are not stored.</p>
@@ -711,9 +679,9 @@ function About({ start }: { start: () => void }) {
     ["amber", "AI use needs improvement", "50 to 79%", "Some habits are working, with clear areas to strengthen."],
     ["red", "High academic-integrity risk", "Below 50%", "Pause, review the guidance and improve the work before submitting."],
   ];
-  return <main className="about-page"><section className="about-hero"><div className="container"><span className="eyebrow"><span /> About the campaign</span><h1>Better AI habits support better learning.</h1><p>Prompt Wise is a social impact learning tool for university students in Malaysia. It helps students pause, think and make responsible choices when using AI.</p></div></section>
+  return <main className="about-page"><section className="about-hero"><div className="container"><span className="eyebrow"><span /> About the campaign</span><h1>Why we made this</h1><p>Prompt Wise is a social impact learning tool for university students in Malaysia. It helps students pause, think and make responsible choices when using AI.</p></div></section>
     <section className="section container about-grid"><div><span className="sdg-badge">4 <small>QUALITY<br />EDUCATION</small></span></div><div><span className="kicker">UN Sustainable Development Goal 4</span><h2>Quality education for everyone</h2><p>SDG 4 aims to ensure inclusive and equitable quality education and promote lifelong learning opportunities for all. Responsible AI literacy is part of being ready to learn, work and participate thoughtfully in a changing world.</p><p>This campaign gives students a practical way to reflect, learn and take action without banning useful technology or treating AI use as automatically wrong.</p><Button onClick={start} icon="arrow">Start the checker</Button></div></section>
-    <section className="section about-details"><div className="container"><div className="section-heading"><span className="kicker">How scoring works</span><h2>Clear rules. No hidden judgement.</h2><p>Part 1 awards 1 point for Yes, 0.5 for Sometimes and 0 for No. In Parts 2 and 3, each correct answer earns the points shown and a wrong answer earns 0. Your percentage is your points divided by the maximum points.</p></div><div className="band-grid">{bands.map(([colour, name, range, description]) => <article key={name}><span className={`band-dot ${colour}`} /><small>{range}</small><h3>{name}</h3><p>{description}</p></article>)}</div></div></section>
+    <section className="section about-details"><div className="container"><div className="section-heading"><span className="kicker">How scoring works</span><h2>How the score works</h2><p>Part 1 awards 1 point for Yes, 0.5 for Sometimes and 0 for No. In Parts 2 and 3, each correct answer earns the points shown and a wrong answer earns 0. Your percentage is your points divided by the maximum points.</p></div><div className="band-grid">{bands.map(([colour, name, range, description]) => <article key={name}><span className={`band-dot ${colour}`} /><small>{range}</small><h3>{name}</h3><p>{description}</p></article>)}</div></div></section>
     <section className="section container limits-grid"><article><span className="learning-icon"><Icon name="compass" /></span><h2>What this tool can and cannot do</h2><p>Prompt Wise supports self-reflection. It is not a detector, not an official judgement and not evidence that misconduct has or has not happened. Assignment rules and lecturer guidance always come first.</p></article><article><span className="learning-icon"><Icon name="lock" /></span><h2>Your privacy</h2><p>No names, accounts or quiz answers are stored. Everything is calculated in your browser.</p></article></section>
     <section className="container team-card"><div><span className="kicker">The project team</span><h2>{TEAM_NAME}</h2><p>A social impact campaign supporting responsible AI literacy.</p><p><b>Informed by expert advice:</b> this checker was refined after an interview with a university lecturer in AI, machine learning and data science.</p></div><div><h3>Note for educators</h3><p>This is a learning aid for opening constructive conversations about responsible AI use. It should not be used to investigate or determine academic misconduct.</p></div></section>
   </main>;
