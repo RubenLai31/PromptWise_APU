@@ -487,3 +487,27 @@ h1 em{text-decoration:none!important;background:linear-gradient(var(--amber),var
 .learning-section{background:var(--off)}
 .quiz-top .logo b,.results-nav .logo b{color:var(--blue)}
 .category-chip{color:var(--blue);background:color-mix(in srgb,var(--blue),transparent 90%)}
+
+/* toolkit page */
+.tools-page{padding:48px 0 72px;display:grid;gap:20px;max-width:760px}
+.tools-intro{max-width:60ch}
+.jump{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 4px}
+.jump button{border:1.5px solid var(--line);background:var(--white);color:var(--text);padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer;transition:border-color .2s,transform .2s}
+.jump button:hover{border-color:var(--blue);transform:translateY(-2px)}
+.reset{margin-top:12px;background:none;border:0;cursor:pointer;color:var(--muted);padding:0}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:16px 0}
+.bar i{display:block;height:100%;background:var(--blue);transition:width .4s}
+@media print{.header,.footer,.jump,.reset{display:none!important}}
+
+/* lessons */
+.lesson summary{cursor:pointer;display:flex;flex-direction:column;gap:2px;list-style:none}
+.lesson summary::-webkit-details-marker{display:none}
+.lesson summary span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.lesson summary b{font-family:Georgia,serif;font-size:1.25rem;color:var(--text)}
+.lesson summary::after{content:"+";position:absolute;right:20px;top:18px;font-size:22px;color:var(--muted)}
+.lesson{position:relative}
+.lesson[open] summary::after{content:"\2212"}
+.lesson ol{padding-left:20px;margin:10px 0;color:var(--muted);line-height:1.7}
+.lesson-tip{margin:12px 0 0;padding:10px 14px;border-left:4px solid var(--amber);background:var(--off);border-radius:6px}
+.row-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.lesson ol{list-style:decimal!important}.lesson li{margin-bottom:8px;padding-left:4px}
