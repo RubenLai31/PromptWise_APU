@@ -18,7 +18,7 @@ type Question = {
   habitTip?: string;
 };
 type Response = { answer: Answer; earned: number };
-type Page = "home" | "quiz" | "results" | "about";
+type Page = "home" | "quiz" | "results" | "about" | "tools" | "learn";
 
 const areaTips: Record<Category, string> = {
   "AI Skills":
@@ -463,10 +463,10 @@ function Header({
   setDark: (value: boolean) => void;
 }) {
   const [menu, setMenu] = useState(false);
-  return <header className="header"><div className="nav-shell"><Logo onClick={() => go("home")} /><nav className={menu ? "nav-links open" : "nav-links"} aria-label="Main navigation"><button onClick={() => { go("home"); setMenu(false); }}>Home</button><button onClick={() => { go("quiz"); setMenu(false); }}>Take the Checker</button><button onClick={() => { goSection("toolkit"); setMenu(false); }}>After the Quiz Toolkit</button><button onClick={() => { go("about"); setMenu(false); }}>About</button></nav><div className="nav-actions"><button className="icon-btn" onClick={() => setDark(!dark)} aria-label={dark ? "Use light mode" : "Use dark mode"}><Icon name={dark ? "sun" : "moon"} /></button><button className="icon-btn mobile-menu" onClick={() => setMenu(!menu)} aria-label="Toggle menu"><Icon name={menu ? "x" : "menu"} /></button></div></div></header>;
+  return <header className="header"><div className="nav-shell"><Logo onClick={() => go("home")} /><nav className={menu ? "nav-links open" : "nav-links"} aria-label="Main navigation"><button onClick={() => { go("home"); setMenu(false); }}>Home</button><button onClick={() => { go("quiz"); setMenu(false); }}>Take the Checker</button><button onClick={() => { go("learn"); setMenu(false); }}>Learn</button><button onClick={() => { go("tools"); setMenu(false); }}>Toolkit</button><button onClick={() => { go("about"); setMenu(false); }}>About</button></nav><div className="nav-actions"><button className="icon-btn" onClick={() => setDark(!dark)} aria-label={dark ? "Use light mode" : "Use dark mode"}><Icon name={dark ? "sun" : "moon"} /></button><button className="icon-btn mobile-menu" onClick={() => setMenu(!menu)} aria-label="Toggle menu"><Icon name={menu ? "x" : "menu"} /></button></div></div></header>;
 }
 
-function Home({ start, about }: { start: () => void; about: () => void }) {
+function Home({ start, tools }: { start: () => void; tools: () => void }) {
   const learning = [
     ["Verify", "Check facts, sources and references before you trust them.", "check"],
     ["Own Work", "Keep your thinking and learning at the centre.", "brain"],
@@ -481,7 +481,7 @@ function Home({ start, about }: { start: () => void; about: () => void }) {
         <div className="hero-copy">
           <h1>Think before you <em>prompt.</em></h1>
           <p>A quick quiz on how you actually use AI for your studies. It takes about seven minutes, and nobody sees your answers.</p>
-          <div className="hero-actions"><Button onClick={start} icon="arrow">Start the checker</Button><button className="text-link" onClick={about}>Why it matters <Icon name="arrow" /></button></div>
+          <div className="hero-actions"><Button onClick={start} icon="arrow">Start the checker</Button><button className="text-link" onClick={tools}>Open the toolkit <Icon name="arrow" /></button></div>
           <div className="trust-row"><span><Icon name="book" />23 questions</span><span><Icon name="clock" />About 7 minutes</span><span><Icon name="lock" />Anonymous</span></div>
         </div>
       </div>
@@ -622,11 +622,9 @@ function Results({
     "I did not enter personal data",
   ];
   const [copied, setCopied] = useState("");
-  const [checks, setChecks] = useState<boolean[]>(() => checklistItems.map(() => false));
-  const [declaration, setDeclaration] = useState(
-    "I used [tool name] to [brainstorm ideas / check grammar / explain a concept]. I wrote [the analysis / the final text] myself and verified all facts and references.",
-  );
-  const codeRef = useRef(`RAI-${percent}-${Math.floor(1000 + Math.random() * 9000)}`);
+  // Result code: overall % + one % per area + a random tag. It holds scores only, never a name or ID.
+  const AREA_LETTER: Record<string, string> = { Verify: "V", "Own Work": "O", Rules: "R", Privacy: "P", Critical: "C", "AI Skills": "A" };
+  const codeRef = useRef(`PW-${percent}-${areaScores.map((a) => `${AREA_LETTER[a.category] ?? "X"}${a.percent}`).join("-")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`);
   const copy = async (value: string, label: string) => {
     await copyText(value);
     setCopied(label);
@@ -646,13 +644,12 @@ function Results({
       window.setTimeout(() => setCopied(""), 1800);
     }
   };
-  const allChecked = checks.every(Boolean);
   const resultIcon = result.band === "green" ? "shield" : result.band === "amber" ? "compass" : "warning";
   const resultDate = new Intl.DateTimeFormat("en-MY", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
   return <main className="results-bg">
     <div className="results-nav"><Logo onClick={home} /><span>Your results</span></div>
     <section className="results-hero container">
-      <div><span className="kicker">Checker complete</span><h1>Here is how you did.</h1><p>Treat it as a guide, not a grade.</p></div>
+      <div><span className="kicker">Checker complete</span><h1>Here is how you did.</h1><p>Treat it as a guide, not a grade. This is a self-reflection tool, not an AI detector, and a score does not prove anyone is or is not academically honest.</p></div>
       <div className="result-summary"><ScoreRing percent={percent} band={result.band} /><div><span className={`result-badge ${result.band}`}><Icon name={resultIcon} />{result.name}</span><p>{result.message}</p></div></div>
     </section>
     <div className="container results-content">
@@ -661,16 +658,84 @@ function Results({
 
       <section id="priorities"><div className="tool-number">Step 1</div><div className="card-heading"><div><span className="kicker">Your 3 priorities</span><h2>Start with your lowest areas</h2></div></div><div className="tip-grid">{lowest.map((area, i) => <article className="tip-card priority-card" key={area.category}><span className="tip-number">0{i + 1}</span><span className="tip-icon"><Icon name={i === 0 ? "shield" : i === 1 ? "brain" : "spark"} /></span><h3>{area.category}</h3><p>{areaTips[area.category]}</p><div className="try-this"><b>Try this on your next assignment</b><span>{practicalActions[area.category]}</span></div>{INSTAGRAM_URL && <a className="post-link" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Read our post <Icon name="external" /></a>}</article>)}</div></section>
 
-      <section className="result-card toolkit-card checklist-card"><div className="tool-number">Step 2</div><div className="card-heading"><div><span className="kicker">Before you submit</span><h2>Before you hand it in</h2></div><Button variant="secondary" onClick={() => window.print()} icon="print">Print / Save as PDF</Button></div><div className="checklist">{checklistItems.map((item, i) => <label key={item}><input type="checkbox" checked={checks[i]} onChange={() => setChecks(checks.map((value, index) => index === i ? !value : value))} /><span className="custom-check">{checks[i] && <Icon name="check" size={16} />}</span><b>{item}</b></label>)}</div><div className={`ready-status ${allChecked ? "ready" : ""}`} role="status"><Icon name={allChecked ? "check" : "clock"} /><div><b>{allChecked ? "Ready to submit" : `${checks.filter(Boolean).length} of 6 checked`}</b><span>{allChecked ? "You completed every check." : "Complete all six before you submit."}</span></div></div></section>
+      <div className="jump" role="navigation" aria-label="Jump to"><button onClick={() => document.getElementById("checklist")?.scrollIntoView({ behavior: "smooth" })}>Checklist</button><button onClick={() => document.getElementById("declaration")?.scrollIntoView({ behavior: "smooth" })}>Declaration</button><button onClick={() => document.getElementById("challenge")?.scrollIntoView({ behavior: "smooth" })}>7-day challenge</button></div>
+      <ChecklistCard />
 
-      <section className="result-card toolkit-card"><div className="tool-number">Step 3</div><div className="card-heading"><div><span className="kicker">Declaration helper</span><h2>Write your AI declaration</h2></div></div><label className="declaration-label" htmlFor="declaration">Your declaration</label><textarea id="declaration" className="declaration-box" value={declaration} onChange={(event) => setDeclaration(event.target.value)} rows={5} /><div className="declaration-actions"><span>Replace the words in brackets before submitting.</span><Button onClick={() => copy(declaration, "declaration")} icon={copied === "declaration" ? "check" : "copy"}>{copied === "declaration" ? "Copied" : "Copy declaration"}</Button></div></section>
+      <DeclarationCard />
 
-      <section className="completion-card"><div><div className="tool-number light-number">Step 4</div><span className="kicker light">Share what you learned</span><h2>{codeRef.current}</h2><p>Save your completion code and invite a friend to check their AI habits.</p></div><div className="completion-actions"><Button variant="secondary" onClick={() => copy(codeRef.current, "code")} icon={copied === "code" ? "check" : "copy"}>{copied === "code" ? "Copied" : "Copy code"}</Button>{GOOGLE_FORM_URL && <Button onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")} icon="external">Submit your code and feedback</Button>}<Button variant="secondary" onClick={share} icon={copied === "share" ? "check" : "share"}>{copied === "share" ? "Challenge copied" : "Challenge a friend"}</Button></div></section>
-      <section className="result-card toolkit-card"><div className="card-heading"><div><span className="kicker">Keep improving</span><h2>One-week improvement challenge</h2></div></div><p>Pick one past assignment or project. Over the next one to two weeks, improve it using what you learned here, step by step and verifying as you go. Then retake the checker and compare your score.</p><p><b>Responsible AI use is a mindset.</b> Follow what interests you, and enjoy building something from what you understand yourself.</p></section>
+      <section className="completion-card"><div><div className="tool-number light-number">Step 4</div><span className="kicker light">Your result code</span><h2>{codeRef.current}</h2><p>Copy this code and paste it into the feedback form. It holds only your scores, with no name or student ID, so results can be combined anonymously to see common gaps.</p></div><div className="completion-actions"><Button variant="secondary" onClick={() => copy(codeRef.current, "code")} icon={copied === "code" ? "check" : "copy"}>{copied === "code" ? "Copied" : "Copy code"}</Button>{GOOGLE_FORM_URL && <Button onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")} icon="external">Open form and paste code</Button>}<Button variant="secondary" onClick={share} icon={copied === "share" ? "check" : "share"}>{copied === "share" ? "Challenge copied" : "Challenge a friend"}</Button></div></section>
+      <ChallengeCard />
       <div className="retake-block"><p>Retake the checker after you have tried your priorities, and see if your score improves.</p><Button variant="ghost" onClick={restart} icon="refresh">Try again</Button></div>
       <p className="privacy-note"><Icon name="lock" />No names. No login. Your quiz answers are not stored.</p>
     </div>
   </main>;
+}
+
+function useSaved<T>(key: string, init: T): [T, (v: T) => void] {
+  const [value, setValue] = useState<T>(() => {
+    try { const raw = localStorage.getItem(key); return raw ? (JSON.parse(raw) as T) : init; } catch { return init; }
+  });
+  const save = (next: T) => {
+    setValue(next);
+    try { localStorage.setItem(key, JSON.stringify(next)); } catch { /* storage unavailable, progress lasts for this visit only */ }
+  };
+  return [value, save];
+}
+
+const CHECKLIST = [
+  "Does my AI use follow my university and module policies?",
+  "Do I understand all the text and code in my submission?",
+  "Have I independently verified the facts, references and code?",
+  "Can I explain and defend this work without AI?",
+  "Have I acknowledged AI help where required?",
+  "Have I avoided sharing personal or confidential information with AI?",
+];
+
+const CHALLENGE = [
+  "Review your university's and module's AI policies, and note anything unclear to ask your lecturer.",
+  "Practise verifying AI information: check one fact, and open each DOI or link to confirm the author and title exist.",
+  "Use AI to explain a difficult concept, then explain it back in your own words.",
+  "Complete part of an assignment on your own, without AI.",
+  "Review and test AI-generated code or calculations yourself, one small piece at a time.",
+  "Check that you have acknowledged any AI help in your work.",
+  "Reflect: what will you keep doing, and what will you change?",
+];
+
+function ChecklistCard() {
+  const [checks, setChecks] = useSaved<boolean[]>("pw-checklist", CHECKLIST.map(() => false));
+  const done = checks.filter(Boolean).length;
+  const all = done === CHECKLIST.length;
+  return <section id="checklist" className="result-card toolkit-card checklist-card"><div className="card-heading"><div><h2>Before you hand it in</h2><p>Tick each one before you submit an assignment.</p></div><Button variant="secondary" onClick={() => window.print()} icon="print">Print / Save as PDF</Button></div><div className="checklist">{CHECKLIST.map((item, i) => <label key={item}><input type="checkbox" checked={!!checks[i]} onChange={() => setChecks(CHECKLIST.map((_, k) => k === i ? !checks[k] : !!checks[k]))} /><span className="custom-check">{checks[i] && <Icon name="check" size={16} />}</span><b>{item}</b></label>)}</div><div className={`ready-status ${all ? "ready" : ""}`} role="status"><Icon name={all ? "check" : "clock"} /><div><b>{all ? "Ready to submit" : `${done} of ${CHECKLIST.length} checked`}</b><span>{all ? "You completed every check." : "Complete all six before you submit."}</span></div></div><button className="text-link reset" onClick={() => setChecks(CHECKLIST.map(() => false))}>Clear ticks</button></section>;
+}
+
+function DeclarationCard() {
+  const [text, setText] = useSaved<string>("pw-declaration", "I used [tool name] to [brainstorm ideas / check grammar / explain a concept]. I wrote [the analysis / the final text] myself and verified all facts and references.");
+  const [copied, setCopied] = useState(false);
+  const copy = async () => { await copyText(text); setCopied(true); window.setTimeout(() => setCopied(false), 1800); };
+  return <section id="declaration" className="result-card toolkit-card"><div className="card-heading"><div><h2>Write your AI declaration</h2><p>Name the tool, say what it did and say what you did. Follow your module's format if it has one.</p></div></div><label className="declaration-label" htmlFor="declaration-box">Your declaration</label><textarea id="declaration-box" className="declaration-box" value={text} onChange={(event) => setText(event.target.value)} rows={5} /><div className="declaration-actions"><span>Replace the words in brackets before submitting.</span><Button onClick={copy} icon={copied ? "check" : "copy"}>{copied ? "Copied" : "Copy declaration"}</Button></div></section>;
+}
+
+function ChallengeCard() {
+  const [days, setDays] = useSaved<boolean[]>("pw-challenge", CHALLENGE.map(() => false));
+  const done = days.filter(Boolean).length;
+  return <section id="challenge" className="result-card toolkit-card"><div className="card-heading"><div><h2>One-week improvement challenge</h2><p>One small step a day. Tick each day when you finish it, then retake the checker and compare your score.</p></div></div><div className="checklist">{CHALLENGE.map((item, i) => <label key={item}><input type="checkbox" checked={!!days[i]} onChange={() => setDays(CHALLENGE.map((_, k) => k === i ? !days[k] : !!days[k]))} /><span className="custom-check">{days[i] && <Icon name="check" size={16} />}</span><b>Day {i + 1}: {item}</b></label>)}</div><div className="bar" aria-hidden="true"><i style={{ width: `${(done / CHALLENGE.length) * 100}%` }} /></div><div className={`ready-status ${done === CHALLENGE.length ? "ready" : ""}`} role="status"><Icon name={done === CHALLENGE.length ? "check" : "clock"} /><div><b>{done} of {CHALLENGE.length} days done</b><span>{done === CHALLENGE.length ? "Challenge complete. Retake the checker to see how you have improved." : "Responsible AI use is a mindset. Enjoy building from what you understand yourself."}</span></div></div><button className="text-link reset" onClick={() => setDays(CHALLENGE.map(() => false))}>Start again</button></section>;
+}
+
+function Tools({ start }: { start: () => void }) {
+  return <main className="container tools-page"><h1>Your responsible-AI toolkit</h1><p className="tools-intro">Use these any time you work with AI, with or without taking the checker. Your ticks are saved in this browser only. This is a self-reflection tool, not an AI detector, and it does not replace your university's rules.</p><ChecklistCard /><DeclarationCard /><ChallengeCard /><section className="result-card"><h2>Not sure where to start?</h2><p>The checker takes about seven minutes and points you to the habits to work on first.</p><Button onClick={start} icon="arrow">Take the checker</Button></section></main>;
+}
+
+const LESSONS = [
+  { area: "Verify", title: "Check what AI tells you", why: "AI can sound confident and still be wrong. It can also invent references that look real, with believable authors and titles.", steps: ["Search every reference title in Google Scholar or the library database.", "Open each DOI or link and check that the author, title and year match.", "Compare key facts and figures with a textbook or academic source.", "Run calculations and code yourself instead of trusting the output."], tip: "If you cannot find a source, do not use it." },
+  { area: "Own Work", title: "Understand it before you submit it", why: "If you cannot explain your work without AI, you have not learned it yet. Understanding also helps you spot AI mistakes.", steps: ["Ask AI to explain one part at a time, then test yourself.", "Close the chat and explain the idea in your own words.", "Build code in small pieces, and run and understand each piece before the next.", "Where you get stuck is what you still need to learn."], tip: "If you cannot explain it, do not submit it yet." },
+  { area: "Rules", title: "Follow the rules and be open", why: "AI rules can differ between modules and assignments. Being open about how you used AI protects you.", steps: ["Read the assignment brief and your module's AI guidelines first.", "If anything is unclear, ask your lecturer early.", "Declare AI help where it was significant: name the tool, what it did and what you did yourself."], tip: "Your module's rules always come before general advice, including this page." },
+  { area: "Privacy", title: "Protect personal information", why: "What you type into an AI tool may be stored or used by the tool, depending on its settings.", steps: ["Do not paste names, student IDs, passwords or confidential documents.", "Remove identifying details before sharing text or data.", "Check the tool's privacy and chat history settings."], tip: "If you would not post it publicly, think twice before pasting it in." },
+  { area: "Critical", title: "Question the answer", why: "A fluent answer is not the same as a correct one. Good questions show weak claims.", steps: ["Ask: what is the evidence, and who says so?", "Look for claims that contradict each other.", "Find the original study and check who ran it, when, and who it covered.", "Compare with at least one independent source."], tip: "Treat AI output as a first draft to check, not a final answer." },
+  { area: "AI Skills", title: "Prompts, tokens, context and memory", why: "Knowing how AI works helps you get better answers and avoid common mistakes.", steps: ["Prompts: state your goal, the audience, the format and any limits. Improve the answer with follow-up messages.", "Tokens: AI reads text as small chunks called tokens, and limits are counted in them.", "Context window: the AI can only consider a limited amount of text at once, so in a very long chat it may lose early details. Start a new chat for a new topic and repeat key instructions.", "Memory: some tools can save details between chats. Check, edit or delete what is stored."], tip: "Be specific, then refine." },
+];
+
+function Learn({ start, tools }: { start: () => void; tools: () => void }) {
+  return <main className="container tools-page"><h1>Short lessons</h1><p className="tools-intro">One short lesson for each area of the checker. Tap a lesson to open it. These are general study tips, not official university policy, so always follow your own module's rules.</p>{LESSONS.map((l, i) => <details className="result-card lesson" key={l.area} open={i === 0}><summary><span>{l.area}</span><b>{l.title}</b></summary><p>{l.why}</p><ol>{l.steps.map((st) => <li key={st}>{st}</li>)}</ol><p className="lesson-tip"><b>Remember:</b> {l.tip}</p></details>)}<section className="result-card"><h2>Ready to test yourself?</h2><p>Take the checker, or use the toolkit before you submit your next assignment.</p><div className="row-actions"><Button onClick={start} icon="arrow">Take the checker</Button><Button variant="secondary" onClick={tools}>Open the toolkit</Button></div></section></main>;
 }
 
 function About({ start }: { start: () => void }) {
@@ -720,11 +785,13 @@ export default function App() {
     setPage("home");
     window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }), 0);
   };
-  const standardPage = page === "home" || page === "about";
+  const standardPage = page === "home" || page === "about" || page === "tools" || page === "learn";
   return <div className="app">
     {standardPage && <Header go={go} goSection={goSection} dark={dark} setDark={setDark} />}
-    {page === "home" && <Home start={() => go("quiz")} about={() => go("about")} />}
+    {page === "home" && <Home start={() => go("quiz")} tools={() => go("tools")} />}
     {page === "about" && <About start={() => go("quiz")} />}
+    {page === "tools" && <Tools start={() => go("quiz")} />}
+    {page === "learn" && <Learn start={() => go("quiz")} tools={() => go("tools")} />}
     {page === "quiz" && <Quiz ordered={ordered} onFinish={finish} exit={() => setPage("home")} />}
     {page === "results" && <Results responses={responses} restart={() => go("quiz")} home={() => go("home")} />}
     {standardPage && <Footer />}
