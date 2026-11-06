@@ -624,7 +624,15 @@ function Results({
   const [copied, setCopied] = useState("");
   // Result code: overall % + one % per area + a random tag. It holds scores only, never a name or ID.
   const AREA_LETTER: Record<string, string> = { Verify: "V", "Own Work": "O", Rules: "R", Privacy: "P", Critical: "C", "AI Skills": "A" };
-  const codeRef = useRef(`PW-${percent}-${areaScores.map((a) => `${AREA_LETTER[a.category] ?? "X"}${a.percent}`).join("-")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`);
+  // Attempt counter: stored in this browser only, so analysis can use first attempts (T1) and ignore repeats.
+  const attemptRef = useRef(0);
+  if (attemptRef.current === 0) {
+    let previous = 0;
+    try { previous = Number(localStorage.getItem("pw-attempts")) || 0; } catch { /* storage unavailable */ }
+    attemptRef.current = previous + 1;
+    try { localStorage.setItem("pw-attempts", String(attemptRef.current)); } catch { /* ignore */ }
+  }
+  const codeRef = useRef(`PW-${percent}-${areaScores.map((a) => `${AREA_LETTER[a.category] ?? "X"}${a.percent}`).join("-")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}-T${attemptRef.current}`);
   const copy = async (value: string, label: string) => {
     await copyText(value);
     setCopied(label);
@@ -663,7 +671,7 @@ function Results({
 
       <DeclarationCard />
 
-      <section className="completion-card"><div><div className="tool-number light-number">Step 4</div><span className="kicker light">Your result code</span><h2>{codeRef.current}</h2><p>Copy this code and paste it into the feedback form. It holds only your scores, with no name or student ID, so results can be combined anonymously to see common gaps.</p></div><div className="completion-actions"><Button variant="secondary" onClick={() => copy(codeRef.current, "code")} icon={copied === "code" ? "check" : "copy"}>{copied === "code" ? "Copied" : "Copy code"}</Button>{GOOGLE_FORM_URL && <Button onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")} icon="external">Open form and paste code</Button>}<Button variant="secondary" onClick={share} icon={copied === "share" ? "check" : "share"}>{copied === "share" ? "Challenge copied" : "Challenge a friend"}</Button></div></section>
+      <section className="completion-card"><div><div className="tool-number light-number">Step 4</div><span className="kicker light">Your result code</span><h2>{codeRef.current}</h2><p>Copy this code and paste it into the feedback form. It holds only your scores and your attempt number (T1 is your first try), with no name or student ID, so results can be combined anonymously to see common gaps.</p></div><div className="completion-actions"><Button variant="secondary" onClick={() => copy(codeRef.current, "code")} icon={copied === "code" ? "check" : "copy"}>{copied === "code" ? "Copied" : "Copy code"}</Button>{GOOGLE_FORM_URL && <Button onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")} icon="external">Open form and paste code</Button>}<Button variant="secondary" onClick={share} icon={copied === "share" ? "check" : "share"}>{copied === "share" ? "Challenge copied" : "Challenge a friend"}</Button></div></section>
       <ChallengeCard />
       <div className="retake-block"><p>Retake the checker after you have tried your priorities, and see if your score improves.</p><Button variant="ghost" onClick={restart} icon="refresh">Try again</Button></div>
       <p className="privacy-note"><Icon name="lock" />No names. No login. Your quiz answers are not stored.</p>
